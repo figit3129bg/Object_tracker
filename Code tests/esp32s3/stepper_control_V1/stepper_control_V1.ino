@@ -101,9 +101,14 @@ void loop() {
       Serial.print("Phone input TILT: ");
       Serial.println(virtualTiltInput);
     }
-    // Will implement an rehoming comand
+    else if(cmd.startsWith("Homing:")){  //Homing: + 1(tilt)/2(pan)
+      if(cmd.substring(7).toInt()==1){ tiltHoming();}
+      else if(cmd.substring(7).toInt()==2){ panHoming();}
+    }
   }
 
+  updatePanMotor();
+  updateTiltMotor();
 }
 
 void updatePanMotor(){
@@ -167,4 +172,36 @@ void updateTiltMotor(){
   }
 
   stepperTilt.runSpeed();
+}
+
+void tiltHoming(){
+  stepperTilt.setSpeed(-3000);
+  while (digitalRead(tiltLimitSwitch) == HIGH) {stepperTilt.runSpeed();}
+  stepperTilt.setCurrentPosition(0);
+}
+
+void panHoming(){
+  // Rotate left until switch pressed
+  stepperPan.setSpeed(-3000);
+  while (digitalRead(panLimitSwitchL) == HIGH) {stepperPan.runSpeed();}
+  stepperPan.setCurrentPosition(0);
+  leftSteps = 0;
+  Serial.println("Left homed");
+  delay(250);
+
+  // Rotate right until switxch pressed
+  stepperPan.setSpeed(3000);
+  while (digitalRead(panLimitSwitchR) == HIGH) {stepperPan.runSpeed();}
+
+  // Record max pan position
+  rightSteps = stepperPan.currentPosition();
+  maxPanPos = rightSteps;
+  Serial.print("Right Steps: ");
+  Serial.println(rightSteps);      
+      
+  // Centering the Z axis
+  panCenterPosition = maxPanPos/2;
+  stepperPan.moveTo(panCenterPosition);
+  stepperPan.runToPosition();
+
 }
