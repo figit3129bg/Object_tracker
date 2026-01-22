@@ -1,2 +1,6 @@
 This is an incomplete version of the stepper test code. 
 It seems completed, now it is just left to be tested, which will be done soon.
+
+Update1 -22.01.2026- Added homing comands, 
+also added the comands updatePanMotor(); updateTiltMotor(); for the actual movement
+  
