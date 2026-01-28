@@ -1,3 +1,5 @@
 The file stepper_control_V3_working is fully working.
 It's main purpose is to test the movement and the homing functions.
 For now this will be the used code, untill the final full version is created.
+
+Current version V4 is able to comunicate with the phone app. The conection isnt 100% reliable but progress is being made to increase the reliablity of conection.
